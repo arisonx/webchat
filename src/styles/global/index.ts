@@ -1,4 +1,4 @@
-import { globalCss } from '../styles';
+import { globalCss } from '../config';
 import { DarkTheme } from '../themes';
 export const GlobalStyles = globalCss({
   '*': {

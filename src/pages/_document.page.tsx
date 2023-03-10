@@ -1,5 +1,5 @@
 import { Html, Head, Main, NextScript } from 'next/document';
-import {getCssText} from '../styles/styles';
+import {getCssText} from '../styles/config';
 export default function Document() {
   return (
     <Html lang="pt-BR">

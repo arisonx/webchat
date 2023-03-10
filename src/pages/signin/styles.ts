@@ -1,4 +1,4 @@
-import { styled } from '@/styles/styles';
+import { styled } from '@/styles/config';
 
 export const ContainerFormLogin = styled('div', {
   width: '80%',
@@ -12,13 +12,13 @@ export const ContainerFormLogin = styled('div', {
 export const Form = styled('form', {
   backgroundColor: '$grayDark',
   width: '50%',
-  height: '100%',
+  height: '95%',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
   padding: ' 1rem',
   gap: '2.2rem',
-  borderRadius: '.4rem',
+  borderRadius: '.5rem',
 });
 
 export const Input = styled('input', {

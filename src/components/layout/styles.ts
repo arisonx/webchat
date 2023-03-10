@@ -1,4 +1,4 @@
-import { styled } from '@/styles/styles';
+import { styled } from '@/styles/config';
 
 
 export const LayoutComponent = styled('div', {

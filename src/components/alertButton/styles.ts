@@ -1,4 +1,4 @@
-import { styled, keyframes } from '@/styles/styles';
+import { styled, keyframes } from '@/styles/config';
 const shake = keyframes({
   '0%': { transform: 'translateX(3px)' },
   '10%': { transform: 'translateX(-3px)' },

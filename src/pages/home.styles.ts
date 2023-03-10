@@ -1,4 +1,4 @@
-import { styled } from '../styles/styles';
+import { styled } from '../styles/config';
 
 export const AppContainer = styled('main', {
   width: '100%',
@@ -35,12 +35,15 @@ export const ContainerChat = styled('div', {
   flex: '1',
   height: '100%',
   backgroundColor: '$blueDark',
-  padding: '1rem 1.5rem',
+  padding: '.4rem 1.5rem',
 });
 
 export const HeaderChat = styled('header', {
   width: '100%',
-  height: '80px',
+  height: '40px',
+  display: 'flex',
+  justifyContent: 'flex-end',
+  padding: '0 1rem',
 });
 
 export const AreaChat = styled('div', {
@@ -57,6 +60,7 @@ export const SendMessageContainer = styled('div', {
   justifyContent: 'center',
   borderRadius: '1.5rem',
   backgroundColor: '$blueDarkLight',
+  marginBottom: '.4rem',
 });
 
 export const InputToSendMessage = styled('input', {
@@ -65,7 +69,7 @@ export const InputToSendMessage = styled('input', {
   border: 'none',
   width: '100%',
   fontSize: '1rem',
-  padding: '1rem 1.5rem',
+  padding: '.8rem 1.5rem',
   fontWeight: '400',
   background: 'none',
   color: '$whiteText',
@@ -83,8 +87,25 @@ export const ButtonSendMessage = styled('button', {
   background: 'none',
   cursor: 'pointer',
   '& svg': {
-    fontSize: '2rem',
+    fontSize: '1.7rem',
+    color: '$whiteText',
+    fontWeight: 'bolder',
+  },
+});
+
+export const ButtonSignOut = styled('button', {
+  background: 'none',
+  border: 'none',
+  cursor: 'pointer',
+  color: '$whiteText',
+  fontSize: '1.2rem',
+  fontWeight: 'bolder',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '.3rem',
+  '& svg': {
     color: '$whiteText',
     fontWeight: 'bold',
+    fontSize: '1.2rem',
   },
 });
