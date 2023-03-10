@@ -7,7 +7,7 @@ const roboto = Roboto({
 });
 interface IPropsButton {
   message: string;
-  state: any;
+  state?: any;
 }
 export const AlertButtonMessage = ({ message, state }: IPropsButton) => {
   const closeButton = () => {

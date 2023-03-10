@@ -11,6 +11,7 @@ import {
 } from './styles';
 import { AlertButtonMessage } from '../../components/alertButton';
 import { useRouter } from 'next/navigation';
+import { useRouter as NextUserRouter } from 'next/router';
 import Head from 'next/head';
 import { FcGoogle } from 'react-icons/fc';
 import { BsGithub } from 'react-icons/bs';
@@ -57,11 +58,21 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [perfilUrl, setPerfilUrl] = useState('');
   const [alertMessage, setAlertMessage] = useState(false);
+  const [authError, setAuthError] = useState(true);
+  const NextRouter = NextUserRouter();
 
+  //global variables
+  const hasAuthError = !!NextRouter.query.error;
+  //auth
   const handleAuhtWithGoogle = async () => {
     await signIn('google');
   };
 
+  const handleAuthWithGithub = async () => {
+    await signIn('github');
+  };
+
+  //signin with UserName
   const handleSingIn = async () => {
     email || (perfilUrl && name.length <= 1)
       ? setAlertMessage(true)
@@ -103,6 +114,13 @@ export default function Login() {
           />
         )}
 
+        {authError && (
+          <AlertButtonMessage
+            message="Você não autorizou a autenticação corretamente!"
+            state={setAuthError}
+          />
+        )}
+
         <ContainerFormLogin className={roboto.className}>
           <Form>
             <Label htmlFor="InputName">Nome</Label>
@@ -138,14 +156,18 @@ export default function Login() {
               Entrar
             </ButtonSignin>
 
-            <IconsBox
-              className={roboto.className}
-            >
-              <AuthButton type="button" onClick={handleAuhtWithGoogle}>
+            <IconsBox className={roboto.className}>
+              <AuthButton
+                type="button"
+                onClick={handleAuhtWithGoogle}
+              >
                 <FcGoogle className="ProvidersLogo" />
               </AuthButton>
 
-              <AuthButton type="submit">
+              <AuthButton
+                type="button"
+                onClick={handleAuthWithGithub}
+              >
                 <BsGithub className="ProvidersLogo" />
               </AuthButton>
             </IconsBox>

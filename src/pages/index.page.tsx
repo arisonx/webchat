@@ -62,11 +62,14 @@ export default function Home() {
   const [message, setMessage] = useState('');
   const { data: dataSession, status: statusSession } = useSession();
   const router = useRouter();
-  console.log(dataSession, statusSession);
+
   //connecting with webSocketServer
   useEffect(() => {
     // WebSocketConnection();
   }, []);
+
+  
+  console.log(dataSession, statusSession);
 
   const SendMessage = () => {
     console.log(message);
