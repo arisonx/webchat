@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import {useRef,useState} from 'react';
 import { Layout } from '../../components/layout';
 import {
   ContainerFormLogin,
@@ -19,7 +19,7 @@ import { Roboto } from '@next/font/google';
 import { api } from '../../lib/axios';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { parseCookies } from 'nookies';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import { authOptions } from '../api/auth/[...nextauth].api';
 import { getServerSession } from 'next-auth';
 //imports
@@ -54,9 +54,6 @@ export const getServerSideProps: GetServerSideProps = async (
 export default function Login() {
   const router = useRouter();
   const inputElement = useRef(null);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [perfilUrl, setPerfilUrl] = useState('');
   const [alertMessage, setAlertMessage] = useState(false);
   const [authError, setAuthError] = useState(true);
   const NextRouter = NextUserRouter();
@@ -64,15 +61,17 @@ export default function Login() {
   //auth error return
   const hasAuthError = !!NextRouter.query.error;
 
-  //auth
+  //auth Google Provider
   const handleAuhtWithGoogle = async () => {
     await signIn('google');
   };
 
+  //auth GitHub Provider
   const handleAuthWithGithub = async () => {
     await signIn('github');
   };
 
+  let name: string, email: string, perfilUrl: string;
   //signin with UserName
   const handleSingIn = async () => {
     email || (perfilUrl && name.length <= 1)
@@ -82,8 +81,8 @@ export default function Login() {
     if (name) {
       await api.post('/user', {
         name: name,
-        email: email || undefined,
-        perfilUrl: perfilUrl || undefined,
+        email: email ?? undefined,
+        perfilUrl: perfilUrl ?? undefined,
       });
       router.push('/');
     }
@@ -129,8 +128,9 @@ export default function Login() {
             <Label htmlFor="InputName">Nome</Label>
             <Input
               id="InputName"
-              onChange={(e) => setName(e.target.value)}
-              value={name}
+              onChange={(e) => {
+                name = e.target.value;
+              }}
               type="text"
               ref={inputElement}
               className={roboto.className}
@@ -138,16 +138,18 @@ export default function Login() {
             <Label htmlFor="inputEmail">Email (opicional)</Label>
             <Input
               id="inputEmail"
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
+              onChange={(e) => {
+                email = e.target.value;
+              }}
               className={roboto.className}
               type="email"
             />
             <Label htmlFor="inputPerfil">Perfil Url (opicional)</Label>
             <Input
               id="inputPerfil"
-              onChange={(e) => setPerfilUrl(e.target.value)}
-              value={perfilUrl}
+              onChange={(e) => {
+                perfilUrl = e.target.value;
+              }}
               className={roboto.className}
               type="text"
             />

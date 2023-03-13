@@ -15,7 +15,6 @@ export const SideBar = styled('nav', {
   flexDirection: 'column',
   backgroundColor: '$bgSideBar',
   borderRadius: '5px',
-  padding: '.5rem',
 });
 
 export const AreaUsersConnected = styled('ul', {
@@ -26,6 +25,24 @@ export const AreaUsersConnected = styled('ul', {
 export const LoggedInUser = styled('div', {
   width: '100%',
   height: '10%',
+  display: ' flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  backgroundColor: '$grayGlass',
+  padding: ' 0 .2rem  ',
+  '& .profileImage': {
+    borderRadius: '50%',
+  },
+  '& span': {
+    color: '$whiteText',
+    fontSize: '1.2rem',
+  },
+
+  '& svg': {
+    color: '$whiteText',
+    fontSize: '1.5rem',
+    cursor: 'pointer',
+  },
 });
 
 export const ContainerChat = styled('div', {
