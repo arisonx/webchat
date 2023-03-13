@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Layout } from '../../components/layout';
 import {
   ContainerFormLogin,
@@ -61,8 +61,9 @@ export default function Login() {
   const [authError, setAuthError] = useState(true);
   const NextRouter = NextUserRouter();
 
-  //global variables
+  //auth error return
   const hasAuthError = !!NextRouter.query.error;
+
   //auth
   const handleAuhtWithGoogle = async () => {
     await signIn('google');
@@ -114,11 +115,13 @@ export default function Login() {
           />
         )}
 
-        {authError && (
+        {hasAuthError && authError ? (
           <AlertButtonMessage
             message="Você não autorizou a autenticação corretamente!"
             state={setAuthError}
           />
+        ) : (
+          false
         )}
 
         <ContainerFormLogin className={roboto.className}>
