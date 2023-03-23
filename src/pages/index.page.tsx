@@ -2,7 +2,6 @@ import { GetServerSideProps, GetServerSidePropsContext } from 'next/types';
 import Head from 'next/head';
 import { parseCookies, destroyCookie } from 'nookies';
 import { Layout } from '../components/layout';
-import { Suspense } from 'react';
 import {
   AppContainer,
   ContainerChat,
@@ -30,6 +29,7 @@ import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Loading } from '@/components/loading';
+import Link from 'next/link';
 //imports
 
 //font
@@ -63,28 +63,25 @@ export const getServerSideProps: GetServerSideProps = async (
 //page
 export default function Home({ cookies }: IPageProps) {
   //hooks
-  const [message, setMessage] = useState('');
   const { data: dataSession, status: statusSession } = useSession();
   const router = useRouter();
 
-  // const userPerfilUrl =
+  //global variables
+  let message: string;
+
+  //cookies data
   const userName = cookies['webchat:UserName'];
   const userEmail = cookies['webchat:Email'];
   const userPerfilUrl = cookies['webchat:Perfil_Url'];
 
-  console.log(userName, userEmail, userPerfilUrl);
   //connecting with webSocketServer
   useEffect(() => {
     // WebSocketConnection();
   }, []);
 
-  console.log(dataSession, statusSession);
-  console.log('perfil-url', userPerfilUrl);
-
   const SendMessage = () => {
     console.log(message);
   };
-
   const handleSignOut = async () => {
     if (statusSession == 'authenticated') {
       await signOut({
@@ -124,25 +121,25 @@ export default function Home({ cookies }: IPageProps) {
             <AreaUsersConnected>
               <h2>Hello world</h2>
             </AreaUsersConnected>
-            <Suspense fallback={<h1>carregando</h1>}>
-              <LoggedInUser>
-                <Image
-                  src={
-                    userPerfilUrl ??
-                    dataSession?.user?.image ??
-                    '/avatardefault.svg'
-                  }
-                  alt="profile"
-                  className="profileImage"
-                  width={40}
-                  height={40}
-                />
-
-                <span>{userName ?? dataSession?.user?.name}</span>
-
+            <LoggedInUser>
+              <Image
+                src={
+                  userPerfilUrl ??
+                  dataSession?.user?.image ??
+                  '/avatardefault.svg'
+                }
+                alt="profile"
+                className="profileImage"
+                width={40}
+                height={40}
+              />
+              <span>
+                {userName ?? dataSession?.user?.name ?? 'carregando...'}
+              </span>
+              <Link href="/profile">
                 <FaUserEdit />
-              </LoggedInUser>
-            </Suspense>
+              </Link>
+            </LoggedInUser>
           </SideBar>
           <ContainerChat>
             <HeaderChat>
@@ -162,7 +159,9 @@ export default function Home({ cookies }: IPageProps) {
                 type="text"
                 placeholder="Digite sua mensagem"
                 className={roboto.className}
-                onChange={(e) => setMessage(e.target.value)}
+                onChange={(e) => {
+                  message = e.target.value;
+                }}
               />
               <ButtonSendMessage
                 type="button"

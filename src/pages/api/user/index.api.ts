@@ -1,4 +1,3 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { setCookie } from 'nookies';
 
@@ -8,7 +7,7 @@ interface IDataUser {
   perfilUrl?: string;
 }
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default function handleUser(req: NextApiRequest, res: NextApiResponse) {
   const { name, email, perfilUrl }: IDataUser = req.body;
 
   setCookie({ res }, 'webchat:UserName', name.toLowerCase(), {

@@ -1,4 +1,4 @@
-import {useRef,useState} from 'react';
+import { useRef, useState } from 'react';
 import { Layout } from '../../components/layout';
 import {
   ContainerFormLogin,
@@ -63,12 +63,16 @@ export default function Login() {
 
   //auth Google Provider
   const handleAuhtWithGoogle = async () => {
-    await signIn('google');
+    await signIn('google', {
+      callbackUrl: 'http://localhost:3000/',
+    });
   };
 
   //auth GitHub Provider
   const handleAuthWithGithub = async () => {
-    await signIn('github');
+    await signIn('github', {
+      callbackUrl: 'http://localhost:3000/',
+    });
   };
 
   let name: string, email: string, perfilUrl: string;
