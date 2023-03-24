@@ -52,16 +52,4 @@ export const InputElement = styled('input', {
   },
 });
 
-export const EditButton = styled('button', {
-  border: 'none',
-  backgroundColor: '$blue700',
-  color: '$whiteText',
-  padding: '.6rem 1rem',
-  fontWeight: '500',
-  borderRadius: '.3rem',
-  cursor: 'pointer',
-  fontSize: '1rem',
-  display: 'flex',
-  alignItems: 'center',
-  letterSpacing: '1px',
-});
+

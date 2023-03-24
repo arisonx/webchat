@@ -2,10 +2,11 @@ import { Layout } from '../../components/layout';
 import {
   ProfilePageContainer,
   ReturnLink,
-  EditButton,
   InputArea,
   InputElement,
 } from './styles';
+
+import { EditUserDataButton } from './components/editButton';
 import Head from 'next/head';
 import Link from 'next/link';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
@@ -13,7 +14,6 @@ import { parseCookies } from 'nookies';
 import { authOptions } from '../api/auth/[...nextauth].api';
 import { getServerSession } from 'next-auth';
 import { BsArrowLeftCircleFill } from 'react-icons/bs';
-import { AiFillEdit } from 'react-icons/ai';
 import { IPageProps } from '@/@types/PageProps';
 import { useRef } from 'react';
 import { Roboto } from '@next/font/google';
@@ -59,7 +59,9 @@ export default function Profile({ cookies }: IPageProps) {
   const userEmail = cookies['webchat:Email'];
   const userPerfilUrl = cookies['webchat:Perfil_Url'];
 
-  console.log(userEmail, userName, userPerfilUrl);
+  let newUserName: string;
+  let newEmail: string;
+  let newPerfilUrl: string;
 
   return (
     <>
@@ -87,13 +89,21 @@ export default function Profile({ cookies }: IPageProps) {
               <InputArea>
                 <InputElement
                   type="text"
+                  ref={nameInputElement}
                   placeholder={userName}
                   disabled
                   id="name"
+                  onChange={(e) => (newUserName = e.target.value)}
                 />
-                <EditButton className={roboto.className}>
-                  Editar <AiFillEdit />
-                </EditButton>
+                {
+                  <EditUserDataButton
+                    save={false}
+                    refInput={nameInputElement}
+                    classname={roboto.className}
+                    
+                  />
+              
+                }
               </InputArea>
             </>
           ) : (
