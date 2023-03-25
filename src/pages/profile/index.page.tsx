@@ -1,4 +1,5 @@
 import { Layout } from '../../components/layout';
+import { Suspense } from 'react';
 import {
   ProfilePageContainer,
   ReturnLink,
@@ -13,9 +14,10 @@ import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { parseCookies } from 'nookies';
 import { authOptions } from '../api/auth/[...nextauth].api';
 import { getServerSession } from 'next-auth';
+import { useSession } from 'next-auth/react';
 import { BsArrowLeftCircleFill } from 'react-icons/bs';
 import { IPageProps } from '@/@types/PageProps';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Roboto } from '@next/font/google';
 //imports
 
@@ -54,14 +56,16 @@ export default function Profile({ cookies }: IPageProps) {
   const emailInputElement = useRef<HTMLInputElement>(null);
   const perfilUrlInputElement = useRef<HTMLInputElement>(null);
 
+  const [newUserName, setNewUserName] = useState('');
+  const [newEmail, setNewEmail] = useState('');
+  const [newPerfilUrl, setNewPerfilUrl] = useState('');
+  const session = useSession();
   //cookies data
   const userName = cookies['webchat:UserName'];
   const userEmail = cookies['webchat:Email'];
   const userPerfilUrl = cookies['webchat:Perfil_Url'];
 
-  let newUserName: string;
-  let newEmail: string;
-  let newPerfilUrl: string;
+  console.log(userEmail, userName, userPerfilUrl)
 
   return (
     <>
@@ -83,32 +87,81 @@ export default function Profile({ cookies }: IPageProps) {
           </Link>
         </ReturnLink>
         <ProfilePageContainer>
-          {userName ? (
-            <>
-              <label htmlFor="name">Name</label>
-              <InputArea>
-                <InputElement
-                  type="text"
-                  ref={nameInputElement}
-                  placeholder={userName}
-                  disabled
-                  id="name"
-                  onChange={(e) => (newUserName = e.target.value)}
-                />
-                {
-                  <EditUserDataButton
-                    save={false}
-                    refInput={nameInputElement}
-                    classname={roboto.className}
-                    
+          {userName || session.data?.user?.name ?  (
+              <>
+                <label htmlFor="name">Nome</label>
+                <InputArea>
+                  <InputElement
+                    type="text"
+                    ref={nameInputElement}
+                    placeholder={userName ?? session?.data?.user?.name!!}
+                    disabled
+                    id="name"
+                    onChange={(e) => setNewUserName(e.target.value)}
                   />
-              
-                }
-              </InputArea>
-            </>
-          ) : (
-            <InputElement />
-          )}
+                  {
+                    <EditUserDataButton
+                      save={false}
+                      refInput={nameInputElement}
+                      classname={roboto.className}
+                      data={{ name: newUserName }}
+                      default_value={userName ?? session.data?.user?.name!!}
+                    />
+                  }
+                </InputArea>
+              </>
+            ):false}
+
+          {userEmail ||
+            session.data?.user?.email ? (
+              <>
+                <label htmlFor="email">Email</label>
+                <InputArea>
+                  <InputElement
+                    type="text"
+                    ref={emailInputElement}
+                    placeholder={userEmail ?? session?.data?.user?.email!!}
+                    disabled
+                    id="email"
+                    onChange={(e) => setNewEmail(e.target.value)}
+                  />
+                  {
+                    <EditUserDataButton
+                      save={false}
+                      refInput={emailInputElement}
+                      classname={roboto.className}
+                      data={{ email: newEmail }}
+                      default_value={userEmail ?? session.data?.user?.email!!}
+                    />
+                  }
+                </InputArea>
+              </>
+            ):false}
+          {userPerfilUrl ||
+            session.data?.user?.image ? (
+              <>
+                <label htmlFor="perfil_url">Perfil Url</label>
+                <InputArea>
+                  <InputElement
+                    type="text"
+                    ref={perfilUrlInputElement}
+                    placeholder={userPerfilUrl ?? session?.data?.user?.image!!}
+                    disabled
+                    id="perfil_url"
+                    onChange={(e) => setNewPerfilUrl(e.target.value)}
+                  />
+                  {
+                    <EditUserDataButton
+                      save={false}
+                      refInput={perfilUrlInputElement}
+                      classname={roboto.className}
+                      data={{ perfilurl: newPerfilUrl }}
+                      default_value={userEmail ?? session.data?.user?.email!!}
+                    />
+                  }
+                </InputArea>
+              </>
+            ):false}
         </ProfilePageContainer>
       </Layout>
     </>

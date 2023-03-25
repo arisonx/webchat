@@ -20,5 +20,8 @@ export const EditButton = styled('button', {
   '& svg': {
     color: 'DarkTurquoise',
   },
-}
-);
+
+  '&::focus': {
+    outline: '2px solid green',
+  },
+});
