@@ -7,6 +7,7 @@ const nextConfig = {
       'lh3.googleusercontent.com',
       'localhost:3000',
       'http://localhost:3000',
+      'localhost'
     ],
   },
 };
