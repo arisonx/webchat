@@ -1,5 +1,4 @@
 import { Layout } from '../../components/layout';
-import { Suspense } from 'react';
 import {
   ProfilePageContainer,
   ReturnLink,
@@ -65,8 +64,6 @@ export default function Profile({ cookies }: IPageProps) {
   const userEmail = cookies['webchat:Email'];
   const userPerfilUrl = cookies['webchat:Perfil_Url'];
 
-  console.log(userEmail, userName, userPerfilUrl)
-
   return (
     <>
       <Head>
@@ -87,81 +84,85 @@ export default function Profile({ cookies }: IPageProps) {
           </Link>
         </ReturnLink>
         <ProfilePageContainer>
-          {userName || session.data?.user?.name ?  (
-              <>
-                <label htmlFor="name">Nome</label>
-                <InputArea>
-                  <InputElement
-                    type="text"
-                    ref={nameInputElement}
-                    placeholder={userName ?? session?.data?.user?.name!!}
-                    disabled
-                    id="name"
-                    onChange={(e) => setNewUserName(e.target.value)}
+          {userName || session.data?.user?.name ? (
+            <>
+              <label htmlFor="name">Nome</label>
+              <InputArea>
+                <InputElement
+                  type="text"
+                  ref={nameInputElement}
+                  placeholder={userName ?? session?.data?.user?.name!!}
+                  disabled
+                  id="name"
+                  onChange={(e) => setNewUserName(e.target.value)}
+                />
+                {
+                  <EditUserDataButton
+                    save={false}
+                    refInput={nameInputElement}
+                    classname={roboto.className}
+                    data={{ name: newUserName }}
+                    default_value={userName ?? session.data?.user?.name!!}
                   />
-                  {
-                    <EditUserDataButton
-                      save={false}
-                      refInput={nameInputElement}
-                      classname={roboto.className}
-                      data={{ name: newUserName }}
-                      default_value={userName ?? session.data?.user?.name!!}
-                    />
-                  }
-                </InputArea>
-              </>
-            ):false}
+                }
+              </InputArea>
+            </>
+          ) : (
+            false
+          )}
 
-          {userEmail ||
-            session.data?.user?.email ? (
-              <>
-                <label htmlFor="email">Email</label>
-                <InputArea>
-                  <InputElement
-                    type="text"
-                    ref={emailInputElement}
-                    placeholder={userEmail ?? session?.data?.user?.email!!}
-                    disabled
-                    id="email"
-                    onChange={(e) => setNewEmail(e.target.value)}
+          {userEmail || session.data?.user?.email ? (
+            <>
+              <label htmlFor="email">Email</label>
+              <InputArea>
+                <InputElement
+                  type="text"
+                  ref={emailInputElement}
+                  placeholder={userEmail ?? session?.data?.user?.email!!}
+                  disabled
+                  id="email"
+                  onChange={(e) => setNewEmail(e.target.value)}
+                />
+                {
+                  <EditUserDataButton
+                    save={false}
+                    refInput={emailInputElement}
+                    classname={roboto.className}
+                    data={{ email: newEmail }}
+                    default_value={userEmail ?? session.data?.user?.email!!}
                   />
-                  {
-                    <EditUserDataButton
-                      save={false}
-                      refInput={emailInputElement}
-                      classname={roboto.className}
-                      data={{ email: newEmail }}
-                      default_value={userEmail ?? session.data?.user?.email!!}
-                    />
-                  }
-                </InputArea>
-              </>
-            ):false}
-          {userPerfilUrl ||
-            session.data?.user?.image ? (
-              <>
-                <label htmlFor="perfil_url">Perfil Url</label>
-                <InputArea>
-                  <InputElement
-                    type="text"
-                    ref={perfilUrlInputElement}
-                    placeholder={userPerfilUrl ?? session?.data?.user?.image!!}
-                    disabled
-                    id="perfil_url"
-                    onChange={(e) => setNewPerfilUrl(e.target.value)}
+                }
+              </InputArea>
+            </>
+          ) : (
+            false
+          )}
+          {userPerfilUrl || session.data?.user?.image ? (
+            <>
+              <label htmlFor="perfil_url">Perfil Url</label>
+              <InputArea>
+                <InputElement
+                  type="text"
+                  ref={perfilUrlInputElement}
+                  placeholder={userPerfilUrl ?? session?.data?.user?.image!!}
+                  disabled
+                  id="perfil_url"
+                  onChange={(e) => setNewPerfilUrl(e.target.value)}
+                />
+                {
+                  <EditUserDataButton
+                    save={false}
+                    refInput={perfilUrlInputElement}
+                    classname={roboto.className}
+                    data={{ perfilurl: newPerfilUrl }}
+                    default_value={userPerfilUrl ?? session.data?.user?.image!!}
                   />
-                  {
-                    <EditUserDataButton
-                      save={false}
-                      refInput={perfilUrlInputElement}
-                      classname={roboto.className}
-                      data={{ perfilurl: newPerfilUrl }}
-                      default_value={userEmail ?? session.data?.user?.email!!}
-                    />
-                  }
-                </InputArea>
-              </>
-            ):false}
+                }
+              </InputArea>
+            </>
+          ) : (
+            false
+          )}
         </ProfilePageContainer>
       </Layout>
     </>

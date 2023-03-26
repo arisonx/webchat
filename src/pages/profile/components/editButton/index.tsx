@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { AiFillEdit, AiFillSave } from 'react-icons/ai';
 import { RefObject } from 'react';
 import { api } from '@/lib/axios';
+import { useKeyPressEvent } from 'react-use';
 
 interface IEditUserData {
   save?: boolean;
@@ -38,7 +39,6 @@ export const EditUserDataButton = ({
 
   const handleNewUserData = async () => {
     setButtonSave(false);
-
     if (refInput.current) {
       refInput.current.disabled = true;
     }
@@ -51,6 +51,7 @@ export const EditUserDataButton = ({
         perfilUrl: data.perfilurl ?? null,
       });
   };
+  useKeyPressEvent('Enter', handleNewUserData);
 
   return (
     <>
