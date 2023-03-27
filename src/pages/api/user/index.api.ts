@@ -22,6 +22,7 @@ export default function handleUser(req: NextApiRequest, res: NextApiResponse) {
       maxAge: 60 * 60 * 24 * 2, //2 dias
       path: '/',
     });
+    return res.status(200).json({ message: 'cookie created successfully' });
   }
 
   if (email) {
@@ -29,6 +30,7 @@ export default function handleUser(req: NextApiRequest, res: NextApiResponse) {
       maxAge: 60 * 60 * 24 * 2, //2 dias
       path: '/',
     });
+    return res.status(200).json({ message: 'cookie created successfully' });
   }
 
   if (perfilUrl) {
@@ -36,7 +38,6 @@ export default function handleUser(req: NextApiRequest, res: NextApiResponse) {
       maxAge: 60 * 60 * 24 * 2, //2 dias
       path: '/',
     });
+    return res.status(200).json({ message: 'cookie created successfully' });
   }
-
-  return res.status(200).json({ message: 'cookie created successfully' });
 }

@@ -2,8 +2,6 @@ import { EditButton } from './styles';
 import { useState, Dispatch, useMemo } from 'react';
 import { AiFillEdit, AiFillSave } from 'react-icons/ai';
 import { RefObject } from 'react';
-import { useKeyPressEvent } from 'react-use';
-import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
 interface IEditUserData {
@@ -29,11 +27,10 @@ export const EditUserDataButton = ({
   setAlertCheck,
   setAlertError,
 }: IEditUserData) => {
-  const route = useRouter();
   const [ButtonSave, setButtonSave] = useState(false);
-
   const handleEditAction = () => {
     !save ? setButtonSave(true) : setButtonSave(false);
+    setAlertCheck(false);
     setAlertError(false);
     if (refInput.current) {
       refInput.current.focus();
@@ -46,7 +43,6 @@ export const EditUserDataButton = ({
           data.name ?? data.email ?? data.perfilurl!!);
       }
     }
-    setAlertCheck(false);
   };
 
   const handleNewUserData = async () => {
@@ -54,19 +50,22 @@ export const EditUserDataButton = ({
     if (refInput.current) {
       refInput.current.disabled = true;
     }
-    if (data.name || data.email || data.perfilurl) {
-      axios.post('/api/user', {
-        name: data.name ?? null,
-        email: data.email ?? null,
-        perfilUrl: data.perfilurl ?? null,
-      });
-      setAlertCheck(true);
-    } else {
+    if (!data.name && !data.email && !data.perfilurl) {
       setAlertError(true);
+    } else {
+      await axios
+        .post('/api/user', {
+          name: data.name ?? null,
+          email: data.email ?? null,
+          perfilUrl: data.perfilurl ?? null,
+        })
+        .then((res) => {
+          if (res.data) {
+            setAlertCheck(true);
+          }
+        });
     }
   };
-
-  useKeyPressEvent('Enter', handleNewUserData);
 
   return (
     <>

@@ -16,7 +16,7 @@ import { authOptions } from '../api/auth/[...nextauth].api';
 import { getServerSession } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import { BsArrowLeftCircleFill } from 'react-icons/bs';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Roboto } from '@next/font/google';
 import { IPageProps } from '@/@types/PageProps';
 //imports
@@ -62,8 +62,6 @@ export default function Profile({ cookies }: IPageProps) {
   const [DataUpdatedAlert, setDataUpdatedAlert] = useState(false);
   const [DataErrorAlert, setDataErrorAlert] = useState(false);
 
-  //valores antigos do estado
-
   const session = useSession();
   //cookies data
   const userName = cookies['webchat:UserName'];
@@ -91,14 +89,14 @@ export default function Profile({ cookies }: IPageProps) {
         {DataUpdatedAlert === true && (
           <DataUpdateAnimation
             classname={roboto.className}
-            duration={1.5}
+            duration={1.3}
             text="Informação atualizada com Sucesso!"
           />
         )}
         {DataErrorAlert === true && (
           <DataError
             classname={roboto.className}
-            duration={1.5}
+            duration={1.3}
             text="Insira a informação para atualizar!"
           />
         )}
