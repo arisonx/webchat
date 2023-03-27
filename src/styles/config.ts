@@ -15,14 +15,18 @@ export const {
   theme: {
     colors: {
       gray800: '#30302f',
+      gray900: '#161a1d',
       gray700: '#222121',
       gray100: '#e1e1e1',
       grayGlass: 'rgba(82, 84, 81, 0.2)',
       grayDark: '#262626',
+      green800: '#40916c',
+      green900: '#40916c',
       blue700: '#1A1AFF',
       blueHover: '#123ab3',
       blackLight: '#1A1A1A',
       whiteSmoke: '#F5F5F5',
+      whiteLight: '#fffcf2',
       whiteText: '#E1E1E6',
       alertRedBase: '#EF665B',
       alertRedDark: '#71192F',

@@ -1,3 +1,5 @@
+import Head from 'next/head';
+import Link from 'next/link';
 import { Layout } from '../../components/layout';
 import {
   ProfilePageContainer,
@@ -6,17 +8,17 @@ import {
   InputElement,
 } from './styles';
 import { EditUserDataButton } from './components/editButton';
-import Head from 'next/head';
-import Link from 'next/link';
+import { DataError } from '@/components/alert-popup/data-error';
+import { DataUpdateAnimation } from '@/components/alert-popup/data-update';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { parseCookies } from 'nookies';
 import { authOptions } from '../api/auth/[...nextauth].api';
 import { getServerSession } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import { BsArrowLeftCircleFill } from 'react-icons/bs';
-import { IPageProps } from '@/@types/PageProps';
 import { useEffect, useRef, useState } from 'react';
 import { Roboto } from '@next/font/google';
+import { IPageProps } from '@/@types/PageProps';
 //imports
 
 //font
@@ -57,17 +59,16 @@ export default function Profile({ cookies }: IPageProps) {
   const [newUserName, setNewUserName] = useState('');
   const [newEmail, setNewEmail] = useState('');
   const [newPerfilUrl, setNewPerfilUrl] = useState('');
+  const [DataUpdatedAlert, setDataUpdatedAlert] = useState(false);
+  const [DataErrorAlert, setDataErrorAlert] = useState(false);
 
-  //data update animation
-  const DataUpdated = false;
+  //valores antigos do estado
 
   const session = useSession();
-
   //cookies data
   const userName = cookies['webchat:UserName'];
   const userEmail = cookies['webchat:Email'];
   const userPerfilUrl = cookies['webchat:Perfil_Url'];
-  
   return (
     <>
       <Head>
@@ -87,6 +88,21 @@ export default function Profile({ cookies }: IPageProps) {
             Voltar
           </Link>
         </ReturnLink>
+        {DataUpdatedAlert === true && (
+          <DataUpdateAnimation
+            classname={roboto.className}
+            duration={1.5}
+            text="Informação atualizada com Sucesso!"
+          />
+        )}
+        {DataErrorAlert === true && (
+          <DataError
+            classname={roboto.className}
+            duration={1.5}
+            text="Insira a informação para atualizar!"
+          />
+        )}
+
         <ProfilePageContainer className={roboto.className}>
           {userName || session.data?.user?.name ? (
             <>
@@ -108,7 +124,8 @@ export default function Profile({ cookies }: IPageProps) {
                     classname={roboto.className}
                     data={{ name: newUserName }}
                     default_value={userName ?? session.data?.user?.name!!}
-                    dataUpdated={DataUpdated}
+                    setAlertCheck={setDataUpdatedAlert}
+                    setAlertError={setDataErrorAlert}
                   />
                 }
               </InputArea>
@@ -137,7 +154,8 @@ export default function Profile({ cookies }: IPageProps) {
                     classname={roboto.className}
                     data={{ email: newEmail }}
                     default_value={userEmail ?? session.data?.user?.email!!}
-                    dataUpdated={DataUpdated}
+                    setAlertCheck={setDataUpdatedAlert}
+                    setAlertError={setDataErrorAlert}
                   />
                 }
               </InputArea>
@@ -165,7 +183,8 @@ export default function Profile({ cookies }: IPageProps) {
                     classname={roboto.className}
                     data={{ perfilurl: newPerfilUrl }}
                     default_value={userPerfilUrl ?? session.data?.user?.image!!}
-                    dataUpdated={DataUpdated}
+                    setAlertCheck={setDataUpdatedAlert}
+                    setAlertError={setDataErrorAlert}
                   />
                 }
               </InputArea>

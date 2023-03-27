@@ -17,7 +17,7 @@ export const ReturnLink = styled('div', {
   },
 });
 
-export const ProfilePageContainer = styled('div', {
+export const ProfilePageContainer = styled('form', {
   width: '50%',
   height: '80%',
   backgroundColor: '$gray700',
