@@ -49,7 +49,13 @@ export const InputElement = styled('input', {
   fontSize: '1rem',
   '&::placeholder': {
     color: '$whiteText',
+    fontWeight: '400',
+  },
+  '&:disabled': {
+    fontWeight: '600',
+    color: '#7a7a7a',
+    '&::placeholder': {
+      color: '#7a7a7a',
+    },
   },
 });
-
-

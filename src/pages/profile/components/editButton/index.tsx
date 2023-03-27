@@ -10,6 +10,7 @@ interface IEditUserData {
   refInput: RefObject<HTMLInputElement>;
   classname: string;
   default_value: string;
+  dataUpdated: boolean;
   data: {
     name?: string;
     perfilurl?: string;
@@ -23,6 +24,7 @@ export const EditUserDataButton = ({
   classname,
   data,
   default_value,
+  dataUpdated,
 }: IEditUserData) => {
   const [ButtonSave, setButtonSave] = useState(false);
   const handleEditAction = () => {
@@ -44,12 +46,13 @@ export const EditUserDataButton = ({
     }
 
     // se algum dado for recebido, atualiza no backend
-    if (data.name || data.email || data.perfilurl)
+    if (data.name || data.email || data.perfilurl) {
       await api.post('/user', {
         email: data.email ?? null,
         name: data.name ?? null,
         perfilUrl: data.perfilurl ?? null,
       });
+    }
   };
   useKeyPressEvent('Enter', handleNewUserData);
 

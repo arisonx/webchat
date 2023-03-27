@@ -5,7 +5,6 @@ import {
   InputArea,
   InputElement,
 } from './styles';
-
 import { EditUserDataButton } from './components/editButton';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -58,7 +57,12 @@ export default function Profile({ cookies }: IPageProps) {
   const [newUserName, setNewUserName] = useState('');
   const [newEmail, setNewEmail] = useState('');
   const [newPerfilUrl, setNewPerfilUrl] = useState('');
+
+  //data update animation
+  const DataUpdated = false;
+
   const session = useSession();
+
   //cookies data
   const userName = cookies['webchat:UserName'];
   const userEmail = cookies['webchat:Email'];
@@ -83,7 +87,7 @@ export default function Profile({ cookies }: IPageProps) {
             Voltar
           </Link>
         </ReturnLink>
-        <ProfilePageContainer>
+        <ProfilePageContainer className={roboto.className}>
           {userName || session.data?.user?.name ? (
             <>
               <label htmlFor="name">Nome</label>
@@ -95,6 +99,7 @@ export default function Profile({ cookies }: IPageProps) {
                   disabled
                   id="name"
                   onChange={(e) => setNewUserName(e.target.value)}
+                  className={roboto.className}
                 />
                 {
                   <EditUserDataButton
@@ -103,6 +108,7 @@ export default function Profile({ cookies }: IPageProps) {
                     classname={roboto.className}
                     data={{ name: newUserName }}
                     default_value={userName ?? session.data?.user?.name!!}
+                    dataUpdated={DataUpdated}
                   />
                 }
               </InputArea>
@@ -122,6 +128,7 @@ export default function Profile({ cookies }: IPageProps) {
                   disabled
                   id="email"
                   onChange={(e) => setNewEmail(e.target.value)}
+                  className={roboto.className}
                 />
                 {
                   <EditUserDataButton
@@ -130,6 +137,7 @@ export default function Profile({ cookies }: IPageProps) {
                     classname={roboto.className}
                     data={{ email: newEmail }}
                     default_value={userEmail ?? session.data?.user?.email!!}
+                    dataUpdated={DataUpdated}
                   />
                 }
               </InputArea>
@@ -148,6 +156,7 @@ export default function Profile({ cookies }: IPageProps) {
                   disabled
                   id="perfil_url"
                   onChange={(e) => setNewPerfilUrl(e.target.value)}
+                  className={roboto.className}
                 />
                 {
                   <EditUserDataButton
@@ -156,6 +165,7 @@ export default function Profile({ cookies }: IPageProps) {
                     classname={roboto.className}
                     data={{ perfilurl: newPerfilUrl }}
                     default_value={userPerfilUrl ?? session.data?.user?.image!!}
+                    dataUpdated={DataUpdated}
                   />
                 }
               </InputArea>
