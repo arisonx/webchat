@@ -15,7 +15,7 @@ import { getServerSession } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import { BsArrowLeftCircleFill } from 'react-icons/bs';
 import { IPageProps } from '@/@types/PageProps';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Roboto } from '@next/font/google';
 //imports
 
@@ -67,7 +67,7 @@ export default function Profile({ cookies }: IPageProps) {
   const userName = cookies['webchat:UserName'];
   const userEmail = cookies['webchat:Email'];
   const userPerfilUrl = cookies['webchat:Perfil_Url'];
-
+  
   return (
     <>
       <Head>

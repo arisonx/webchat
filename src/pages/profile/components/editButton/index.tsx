@@ -33,8 +33,8 @@ export const EditUserDataButton = ({
       refInput.current.focus();
       refInput.current.disabled = false;
       refInput.current.placeholder = '';
-      if (!data.name || !data.email || !data.perfilurl) {
-        return (refInput.current.value = default_value);
+      if (!data.name && !data.email && !data.perfilurl) {
+        return (refInput.current.value =default_value);
       }
     }
   };
