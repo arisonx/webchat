@@ -1,4 +1,4 @@
-import { styled, keyframes } from '@/styles/config';
+import { keyframes, styled } from '@/styles/config';
 const shake = keyframes({
   '0%': { transform: 'translateX(3px)' },
   '10%': { transform: 'translateX(-3px)' },
@@ -9,28 +9,29 @@ const shake = keyframes({
   '100%': { transform: 'translateY(0px) translateX(0px)' },
 });
 
-export const AlertButton = styled('button', {
+export const UserDataErrorContainer = styled('div', {
   backgroundColor: '$alertRedLight',
   border: 'none',
-  cursor: 'pointer',
-  width: '28rem',
+  width: '24rem',
   display: 'flex',
-  padding: ' .8rem 1rem ',
+  padding: ' .6rem 1rem ',
   justifyContent: 'space-between',
-  fontSize: '1rem',
+  textAlign: 'center',
   alignItems: 'center',
-  color: '$alertRedDark',
-  borderRadius: '.2rem',
+  borderRadius: '.4rem',
   position: 'absolute',
   left: '5%',
   top: '5%',
   animation: `${shake} 300ms`,
-  '&:.WarningCircleIcon': {
+  zIndex: 4,
+  '& p': {
     color: '$alertRedBase',
-    width: '.7rem',
+    fontSize: '1rem',
+    fontWeight: '400',
   },
-  '&:.Xicon': {
-    color: '$alertRedBase',
-    width: '.7rem',
+  '& svg': {
+    color: '$alertRedDark',
+    cursor: 'pointer',
+    fontSize: '1rem',
   },
 });

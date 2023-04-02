@@ -1,40 +1,45 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { sign } from 'jsonwebtoken';
 import { setCookie } from 'nookies';
 interface IDataUser {
   name: string;
-  perfilUrl?: string;
-  email?: string;
+  perfil_url: string;
 }
 
 export default function handleUser(req: NextApiRequest, res: NextApiResponse) {
-  const { name, perfilUrl, email }: IDataUser = req.body;
-
-  //validations
+  const { name, perfil_url }: IDataUser = req.body;
+  //validation
   if (req.method === 'GET') {
     return res.status(401).json({
       status: 'error',
       message: 'method invalid',
     });
   }
-  if (!name && !perfilUrl && !email) {
+
+  if (!name && !perfil_url) {
     return res.status(404).json({
       status: 'error',
       message: ' all data is invalid',
     });
   }
+
   if (name) {
-    const token = sign({ name }, `${process.env.JWT_SECRET}`, {
-      expiresIn: '7d',
-    });
-    setCookie({ res }, 'webchat:session', token, {
-      maxAge: 60 * 60 * 24 * 7, //7 dias
+    setCookie({ res }, 'webchat:name', name, {
+      maxAge: 60 * 60 * 24 * 1, //1day
       path: '/',
     });
 
     return res.status(200).json({
-      status: 'ok',
-      message: 'token created successfully',
+      message: 'cookie created successfully',
+    });
+  }
+
+  if (perfil_url) {
+    setCookie({ res }, 'webchat:perfilurl', perfil_url, {
+      maxAge: 60 * 60 * 24 * 1, //1day
+      path: '/',
+    });
+    return res.status(200).json({
+      message: 'cookie created successfully',
     });
   }
 }

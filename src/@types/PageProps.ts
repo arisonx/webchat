@@ -1,7 +1,7 @@
 export interface IPageProps {
   cookies: {
-    'webchat:UserName'?: string;
-    'webchat:Perfil_Url'?: string;
-    'webchat:Email'?: string;
+    'webchat:name'?: string;
+    'webchat:perfilUrl'?: string;
+    'webchat:email'?: string;
   };
 }

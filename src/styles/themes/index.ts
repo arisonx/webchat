@@ -1,13 +1,8 @@
-import { createTheme} from '@stitches/react';
+import { createTheme } from '@stitches/react';
+import { css } from '../config';
 
 export const DarkTheme = createTheme({
   colors: {
-    background: '#121214',
-  },
-});
-
-export const LightTheme = createTheme({
-  colors: {
-    background: "#e1e1e1",
+    background: '#03010B',
   },
 });

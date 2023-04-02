@@ -16,13 +16,22 @@ export const SigninContainer = styled('section', {
     fontSize: '1.1rem',
   },
 });
+
 //-> submit
 export const SubmitArea = styled('form', {
+  width: '70%',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  gap: '2rem',
+  flexDirection: 'column',
+  gap: '4rem',
   paddingLeft: '4rem',
+});
+
+export const InputContainer = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '1rem',
   '& input': {
     border: ' 2px solid #212529',
     padding: '0 .8rem ',
@@ -30,8 +39,8 @@ export const SubmitArea = styled('form', {
     width: '19rem',
     background: 'none',
     color: '$gray100',
-    fontSize: '1rem',
     borderRadius: '.5rem',
+    fontSize: '1rem',
     fontWeight: '400',
     '&:focus': {
       border: 'none',
@@ -48,51 +57,65 @@ export const SubmitArea = styled('form', {
     outline: 'none',
     border: 'none',
     cursor: 'pointer',
-    '& svg': {
-      color: '#BFC0C0',
-      fontSize: '2.5rem',
-    },
+    color: '#BFC0C0',
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: '1rem',
+    gap: '.2rem',
     '&:hover': {
       transform: 'scale(1.1) translate(3px)',
+      color: '$blueHover',
     },
-  },
-});
-//-> authentication
-export const AuthenticationArea = styled('div', {
-  width: '50%',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  paddingTop: '1rem',
-  '& p': {
-    color: '$whiteTextSecondary',
-    fontSize: '1.3rem',
-  },
-  '& span': {
-    marginTop: '.5rem',
-    display: 'block',
-    width: '70%',
-    height: '1px',
-    backgroundColor: '$blueDarkLight',
-  },
-});
-export const AuthButtonsContainer = styled('div', {
-  marginTop: '3rem',
-  display: ' flex',
-  width: '50%',
-  justifyContent: 'center',
-  gap: '2rem',
-  '& button': {
-    border: 'none',
-    background: 'none',
-    cursor: 'pointer',
     '& svg': {
-      height: '2.2rem',
+      fontSize: '2rem',
     },
-    '&.auth-google-button': {
-      '& svg': {
-        height: '2rem',
-      },
-    },
+  },
+});
+
+export const SubmitButton = styled('button', {
+  padding: '.5rem 0',
+  width: '10rem',
+  backgroundColor: '$puplePrimary',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  gap: '.4rem',
+  color: '$whiteText',
+  fontSize: '.9rem',
+  fontWeight: '400',
+  border: 'none',
+  borderRadius: '.5rem',
+  marginRight: '2rem',
+  cursor: 'pointer',
+  '&:hover': {
+    backgroundColor: '$blueHover',
+  },
+  '& svg': {
+    fontSize: '1.4rem',
+  },
+});
+
+export const ReturnButton = styled('button', {
+  padding: '.5rem 0',
+  width: '10rem',
+  display: 'flex',
+  justifyContent: 'center',
+  background: 'none',
+  alignItems: 'center',
+  gap: '.4rem',
+  color: '$whiteText',
+  fontSize: '1.1rem',
+  fontWeight: '400',
+  border: 'none',
+  borderRadius: '.5rem',
+  cursor: 'pointer',
+  position: 'absolute',
+  left: '1%',
+  top: '4%',
+  '&:hover': {
+    color: '$blueHover',
+  },
+  '& svg': {
+    fontSize: '1.5rem',
   },
 });

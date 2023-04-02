@@ -44,9 +44,10 @@ export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext
 ) => {
   const cookies = parseCookies({ req: ctx.req });
-  const UserName = cookies['webchat:UserName'];
+  const sessionWithUserData = cookies['webchat:session'];
+
   const session = await getServerSession(ctx.req, ctx.res, authOptions);
-  if (!session && !UserName) {
+  if (!session && !sessionWithUserData) {
     return {
       redirect: {
         destination: '/signin',
@@ -70,9 +71,9 @@ export default function Home({ cookies }: IPageProps) {
   let message: string;
 
   //cookies data
-  const userName = cookies['webchat:UserName'];
-  const userEmail = cookies['webchat:Email'];
-  const userPerfilUrl = cookies['webchat:Perfil_Url'];
+  // const userName = cookies['webchat:UserName'];
+  // const userEmail = cookies['webchat:Email'];
+  // const userPerfilUrl = cookies['webchat:Perfil_Url'];
 
   //connecting with webSocketServer
   useEffect(() => {
@@ -89,10 +90,7 @@ export default function Home({ cookies }: IPageProps) {
       });
       router.push('/signin');
     }
-
-    destroyCookie(null, 'webchat:UserName');
-    destroyCookie(null, 'webchat:Email');
-    destroyCookie(null, 'webchat:Perfil_Url');
+    destroyCookie(null, 'webchat:session');
     router.push('/signin');
   };
 
@@ -124,8 +122,8 @@ export default function Home({ cookies }: IPageProps) {
             <LoggedInUser>
               <Image
                 src={
-                  userPerfilUrl ??
-                  dataSession?.user?.image ??
+                  // userPerfilUrl ??
+                  // dataSession?.user?.image ??
                   '/avatardefault.svg'
                 }
                 alt="profile"
@@ -134,7 +132,7 @@ export default function Home({ cookies }: IPageProps) {
                 height={40}
               />
               <span>
-                {userName ?? dataSession?.user?.name ?? 'carregando...'}
+                {/* {userName ?? dataSession?.user?.name ?? 'carregando...'} */}
               </span>
               <Link href="/profile">
                 <FaUserEdit />
