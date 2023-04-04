@@ -21,7 +21,6 @@ import { FaUserEdit } from 'react-icons/fa';
 import { Roboto } from '@next/font/google';
 import { useEffect, useState } from 'react';
 import { WebSocketConnection } from '../lib/socketIo/connection';
-import { AlertButtonMessage } from '../components/alertButton';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './api/auth/[...nextauth].api';
 import { IPageProps } from '@/@types/PageProps';
@@ -70,11 +69,7 @@ export default function Home({ cookies }: IPageProps) {
   //global variables
   let message: string;
 
-  //cookies data
-  // const userName = cookies['webchat:UserName'];
-  // const userEmail = cookies['webchat:Email'];
-  // const userPerfilUrl = cookies['webchat:Perfil_Url'];
-
+  
   //connecting with webSocketServer
   useEffect(() => {
     // WebSocketConnection();
