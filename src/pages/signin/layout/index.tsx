@@ -1,5 +1,5 @@
 import { Container, Start } from './styles';
-import { Layout } from '@/components/newlayout';
+import { Layout } from '@/components/layout';
 import Head from 'next/head';
 import Image from 'next/image';
 import { ChatCenteredDots } from 'phosphor-react';
