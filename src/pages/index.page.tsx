@@ -19,7 +19,7 @@ import { IoMdSend } from 'react-icons/io';
 import { BiLogOut } from 'react-icons/bi';
 import { FaUserEdit } from 'react-icons/fa';
 import { Roboto } from '@next/font/google';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { WebSocketConnection } from '../lib/socketIo/connection';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './api/auth/[...nextauth].api';
@@ -27,7 +27,6 @@ import { IPageProps } from '@/@types/PageProps';
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Loading } from '@/components/loading';
 import Link from 'next/link';
 //imports
 
@@ -43,7 +42,7 @@ export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext
 ) => {
   const cookies = parseCookies({ req: ctx.req });
-  const sessionWithUserData = cookies['webchat:session'];
+  const sessionWithUserData = cookies['session'];
 
   const session = await getServerSession(ctx.req, ctx.res, authOptions);
   if (!session && !sessionWithUserData) {
@@ -69,7 +68,6 @@ export default function Home({ cookies }: IPageProps) {
   //global variables
   let message: string;
 
-  
   //connecting with webSocketServer
   useEffect(() => {
     // WebSocketConnection();
@@ -108,7 +106,10 @@ export default function Home({ cookies }: IPageProps) {
         />
       </Head>
 
-      <Layout svg={false}>
+      <Layout
+        centralizedComponents={false}
+        classname=""
+      >
         <AppContainer>
           <SideBar>
             <AreaUsersConnected>
