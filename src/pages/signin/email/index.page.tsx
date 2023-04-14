@@ -1,7 +1,8 @@
 import * as zod from 'zod';
+import axios from 'axios';
+import Head from 'next/head';
 import { Inter, Poppins } from '@next/font/google';
 import { SigninLayout } from '../layout';
-import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import { destroyCookie } from 'nookies';
 import {
@@ -18,13 +19,15 @@ import { ArrowCircleRight } from 'phosphor-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import axios from 'axios';
 import type { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { parseCookies } from 'nookies';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/pages/api/auth/[...nextauth].api';
 import { IPageProps } from '@/@types/PageProps';
 import { Sucess } from '@/components/sucess';
+import { IUserData } from '@/@types/IApiDataUser';
+import { Loading } from '@/components/loading/';
+
 //imports
 
 //fonts
@@ -53,7 +56,7 @@ export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext
 ) => {
   const cookies = parseCookies({ req: ctx.req });
-  const sessionWithUserData = cookies['webchat:session'];
+  const sessionWithUserData = cookies['session'];
   const username = cookies['webchat:name'];
   const session = await getServerSession(ctx.req, ctx.res, authOptions);
   if (session || sessionWithUserData) {
@@ -81,8 +84,9 @@ export const getServerSideProps: GetServerSideProps = async (
 export default function Email({ cookies }: IPageProps) {
   const [UserDataInvalid, setUserDataInvalid] = useState(true);
   const [sucess, setSucess] = useState(true);
+  const userName = cookies['webchat:name'] as string;
+  const userPerfilUrl = cookies['webchat:perfilurl'] as string;
 
-  const userName = cookies['webchat:name'];
   const NextRouter = useRouter();
 
   //input data schema
@@ -102,30 +106,41 @@ export default function Email({ cookies }: IPageProps) {
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationsSchema),
   });
-
   //submit
   const submit: SubmitHandler<ValidationSchema> = async ({ email }) => {
-    const createCokie = await axios.post('/api/user', {
-      perfilUrl: email,
+    const data: IUserData = {
       name: userName,
-    });
-    if (createCokie.status === 200) {
-      NextRouter.push('/');
-      destroyCookie(null, 'webchat:name');
-      destroyCookie(null, 'webchat:email');
-      destroyCookie(null, 'webchat:perfilurl');
+      perfilurl: userPerfilUrl,
+      email: email,
+    };
+    const creatingUser = await axios.post(`/api/user/create`, data);
+    if (creatingUser.status === 200) {
+      const createCookie = await axios.post('/api/user/create-cookie', {
+        token: creatingUser.data.token,
+      });
+      if (createCookie.status === 200) {
+        destroyCookie(null, 'webchat:name');
+        destroyCookie(null, 'webchat:perfilurl');
+        NextRouter.push('/');
+      }
     }
   };
   //continue
   const handleContinue = async () => {
-    const auth = await axios.post('/api/user', {
+    const creatingUser = await axios.post('/api/user/create', {
       name: userName,
     });
-    if (auth.status === 200) {
-      NextRouter.push('/');
-      destroyCookie(null, 'webchat:name');
-      destroyCookie(null, 'webchat:email');
-      destroyCookie(null, 'webchat:perfilurl');
+
+    if (creatingUser.status === 200) {
+      const createCookie = await axios.post('/api/user/create-cookie', {
+        token: creatingUser.data.token,
+      });
+
+      if (createCookie.status === 200) {
+        destroyCookie(null, 'webchat:name');
+        destroyCookie(null, 'webchat:perfilurl');
+        NextRouter.push('/');
+      }
     }
   };
   //focus
@@ -134,7 +149,7 @@ export default function Email({ cookies }: IPageProps) {
     if (errors.email) {
       setUserDataInvalid(true);
     }
-  }, [errors.email]);
+  }, [errors.email, setFocus]);
 
   return (
     <>
@@ -199,14 +214,18 @@ export default function Email({ cookies }: IPageProps) {
               </button>
             </InputContainer>
 
-            <SubmitButton
-              type="submit"
-              className={poppins.className}
-              disabled={isSubmitting}
-            >
-              Enviar
-              <HiArrowSmRight />
-            </SubmitButton>
+            {isSubmitting && !isSubmitSuccessful ? (
+              <Loading text="Enviando dados ..." />
+            ) : (
+              <SubmitButton
+                type="submit"
+                className={poppins.className}
+                disabled={isSubmitting}
+              >
+                Enviar
+                <HiArrowSmRight />
+              </SubmitButton>
+            )}
           </SubmitArea>
         </SigninContainer>
       </SigninLayout>

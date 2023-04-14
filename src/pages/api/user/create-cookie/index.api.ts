@@ -1,12 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { setCookie } from 'nookies';
-interface IDataUser {
+interface IUserData {
   name: string;
   perfil_url: string;
+  token: string;
 }
 
 export default function handleUser(req: NextApiRequest, res: NextApiResponse) {
-  const { name, perfil_url }: IDataUser = req.body;
+  const { name, perfil_url, token }: IUserData = req.body;
   //validation
   if (req.method === 'GET') {
     return res.status(401).json({
@@ -15,10 +16,10 @@ export default function handleUser(req: NextApiRequest, res: NextApiResponse) {
     });
   }
 
-  if (!name && !perfil_url) {
+  if (!name && !perfil_url && !token) {
     return res.status(404).json({
       status: 'error',
-      message: ' all data is invalid',
+      message: ' no data reported',
     });
   }
 
@@ -36,6 +37,15 @@ export default function handleUser(req: NextApiRequest, res: NextApiResponse) {
   if (perfil_url) {
     setCookie({ res }, 'webchat:perfilurl', perfil_url, {
       maxAge: 60 * 60 * 24 * 1, //1day
+      path: '/',
+    });
+    return res.status(200).json({
+      message: 'cookie created successfully',
+    });
+  }
+  if (token) {
+    setCookie({ res }, 'session', token, {
+      maxAge: 60 * 60 * 24 * 30, //1day
       path: '/',
     });
     return res.status(200).json({
