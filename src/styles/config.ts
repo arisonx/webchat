@@ -30,7 +30,7 @@ export const {
       blue700: '#1A1AFF',
       blueHover: '#123ab3',
       blackLight: '#1A1A1A',
-      navybluedark: '#03010B',
+      navybluedark: '03010B',
       whiteSmoke: '#F5F5F5',
       whiteLight: '#fffcf2',
       whiteText: '#E1E1E6',

@@ -51,7 +51,7 @@ export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext
 ) => {
   const cookies = parseCookies({ req: ctx.req });
-  const sessionWithUserData = cookies['session'];
+  const sessionWithUserData = cookies['webchat:session'];
   const username = cookies['webchat:name'];
   const session = await getServerSession(ctx.req, ctx.res, authOptions);
   if (session || sessionWithUserData) {
@@ -108,7 +108,7 @@ export default function Avatar() {
     const createCookie = await axios.post('/api/user/create-cookie', {
       perfil_url: avatar_url,
     });
-    if (createCookie.status === 200) {
+    if (createCookie.status == 200) {
       NextRouter.push('/signin/email');
     }
   };
@@ -123,7 +123,7 @@ export default function Avatar() {
     if (errors.avatar_url) {
       setUserDataInvalid(true);
     }
-  }, [errors.avatar_url, setFocus]);
+  }, [errors.avatar_url]);
 
   return (
     <>

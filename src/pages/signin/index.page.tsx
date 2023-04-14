@@ -116,7 +116,7 @@ export default function SignIn() {
       setUserDataInvalid(true);
     }
     setFocus('name');
-  }, [errors.name, setFocus]);
+  }, [errors.name]);
 
   return (
     <>
