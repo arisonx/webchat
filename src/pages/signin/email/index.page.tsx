@@ -1,5 +1,5 @@
 import * as zod from 'zod';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import Head from 'next/head';
 import { Inter, Poppins } from '@next/font/google';
 import { SigninLayout } from '../layout';
@@ -83,6 +83,7 @@ export const getServerSideProps: GetServerSideProps = async (
 
 export default function Email({ cookies }: IPageProps) {
   const [UserDataInvalid, setUserDataInvalid] = useState(true);
+  const [userAlreadyExists, setUserAlreadyExists] = useState(false);
   const [sucess, setSucess] = useState(true);
   const userName = cookies['webchat:name'] as string;
   const userPerfilUrl = cookies['webchat:perfilurl'] as string;
@@ -103,6 +104,7 @@ export default function Email({ cookies }: IPageProps) {
     setFocus,
     formState: { errors, isSubmitting, isSubmitSuccessful },
     clearErrors,
+    resetField,
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationsSchema),
   });
@@ -113,15 +115,27 @@ export default function Email({ cookies }: IPageProps) {
       perfilurl: userPerfilUrl,
       email: email,
     };
-    const creatingUser = await axios.post(`/api/user/create`, data);
-    if (creatingUser.status === 200) {
-      const createCookie = await axios.post('/api/user/create-cookie', {
-        token: creatingUser.data.token,
-      });
-      if (createCookie.status === 200) {
-        destroyCookie(null, 'webchat:name');
-        destroyCookie(null, 'webchat:perfilurl');
-        NextRouter.push('/');
+    const userExists = await axios.post('/api/user/get-by-email', {
+      email: email,
+    });
+    const { data: userExistsStatus } = userExists;
+    if (userExistsStatus?.exists === true) {
+      setUserAlreadyExists(true);
+      setSucess(false);
+      resetField('email');
+    }
+    if (userExistsStatus?.exists === false) {
+      const creatingUser = await axios.post(`/api/user/create`, data);
+      if (creatingUser.status === 200) {
+        const createCookie = await axios.post('/api/user/create-cookie', {
+          token: creatingUser.data.token,
+        });
+        if (createCookie.status === 200) {
+          setSucess(true);
+          destroyCookie(null, 'webchat:name');
+          destroyCookie(null, 'webchat:perfilurl');
+          NextRouter.push('/');
+        }
       }
     }
   };
@@ -170,10 +184,17 @@ export default function Email({ cookies }: IPageProps) {
         />
       </Head>
       <SigninLayout>
-        {isSubmitSuccessful && sucess && (
+        {isSubmitSuccessful && sucess && !userAlreadyExists && (
           <Sucess
             disableAction={setSucess}
             text="Informação recebida com sucesso!"
+          />
+        )}
+        {userAlreadyExists && (
+          <UserDataErrorComponent
+            disableAction={setUserAlreadyExists}
+            message="Email já está existe"
+            state={userAlreadyExists}
           />
         )}
 
