@@ -1,5 +1,6 @@
-import { GetServerSideProps, GetServerSidePropsContext } from 'next/types';
 import Head from 'next/head';
+import axios from 'axios';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next/types';
 import { parseCookies, destroyCookie } from 'nookies';
 import { Layout } from '../components/layout';
 import {
@@ -19,8 +20,9 @@ import { IoMdSend } from 'react-icons/io';
 import { BiLogOut } from 'react-icons/bi';
 import { FaUserEdit } from 'react-icons/fa';
 import { Roboto } from '@next/font/google';
-import { useEffect } from 'react';
+import { useEffect, Suspense, useState } from 'react';
 import { WebSocketConnection } from '../lib/socketIo/connection';
+import { UserDataErrorComponent } from '../components/user-data-error';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './api/auth/[...nextauth].api';
 import { IPageProps } from '@/@types/PageProps';
@@ -53,6 +55,27 @@ export const getServerSideProps: GetServerSideProps = async (
       },
     };
   }
+
+  if (sessionWithUserData) {
+    const userExists = await fetch(
+      `${process.env.LOCAL_URL}/api/user/get-by-token`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          token: sessionWithUserData,
+        }),
+        cache: 'force-cache',
+      }
+    );
+    const user = await userExists.json();
+    return {
+      props: {
+        user,
+        cookies,
+      },
+    };
+  }
+
   return {
     props: {
       cookies,
@@ -60,9 +83,10 @@ export const getServerSideProps: GetServerSideProps = async (
   };
 };
 //page
-export default function Home({ cookies }: IPageProps) {
+export default function Home({ cookies, user }: IPageProps) {
   //hooks
   const { data: dataSession, status: statusSession } = useSession();
+  const [deleteError, setDeleteError] = useState(false);
   const router = useRouter();
 
   //global variables
@@ -82,9 +106,17 @@ export default function Home({ cookies }: IPageProps) {
         redirect: true,
       });
       router.push('/signin');
+    } else {
+      await axios
+        .delete('/api/user/delete')
+        .then(() => {
+          destroyCookie(null, 'session');
+          router.push('/signin');
+        })
+        .catch(() => {
+          setDeleteError(true);
+        });
     }
-    destroyCookie(null, 'webchat:session');
-    router.push('/signin');
   };
 
   return (
@@ -108,8 +140,15 @@ export default function Home({ cookies }: IPageProps) {
 
       <Layout
         centralizedComponents={false}
-        classname=""
+        classname={roboto.className}
       >
+        {deleteError && (
+          <UserDataErrorComponent
+            message="Ocorreu um erro"
+            disableAction={setDeleteError}
+            state={deleteError}
+          />
+        )}
         <AppContainer>
           <SideBar>
             <AreaUsersConnected>
@@ -118,8 +157,8 @@ export default function Home({ cookies }: IPageProps) {
             <LoggedInUser>
               <Image
                 src={
-                  // userPerfilUrl ??
-                  // dataSession?.user?.image ??
+                  user?.perfil_url ??
+                  dataSession?.user?.image ??
                   '/avatardefault.svg'
                 }
                 alt="profile"
@@ -128,7 +167,7 @@ export default function Home({ cookies }: IPageProps) {
                 height={40}
               />
               <span>
-                {/* {userName ?? dataSession?.user?.name ?? 'carregando...'} */}
+                {user?.name ?? dataSession?.user?.name ?? 'carregando'}
               </span>
               <Link href="/profile">
                 <FaUserEdit />
