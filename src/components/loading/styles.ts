@@ -9,6 +9,9 @@ export const LoadingContainer = styled('div', {
   alignItems: 'center',
   justifyContent: 'center',
   gap: '.4rem',
+  position:"absolute",
+  left:"4rem",
+  top:"7rem",
   '& p': {
     color: '$whiteLight',
     fontSize: '1rem',
