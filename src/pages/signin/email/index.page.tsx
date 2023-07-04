@@ -44,7 +44,7 @@ const inter = Inter({
     'greek-ext',
   ],
 });
-
+// font
 const poppins = Poppins({
   weight: ['100', '200', '300', '300', '500', '600', '700', '800', '900'],
   subsets: ['latin', 'devanagari', 'latin-ext'],
@@ -81,13 +81,16 @@ export const getServerSideProps: GetServerSideProps = async (
   };
 };
 
+//---------------------------->  PAGE
 export default function Email({ cookies }: IPageProps) {
   const [UserDataInvalid, setUserDataInvalid] = useState(true);
   const [userAlreadyExists, setUserAlreadyExists] = useState(false);
   const [sucess, setSucess] = useState(true);
+  const [DefaultError, setDefaultError] = useState(false);
   const userName = cookies['webchat:name'] as string;
   const userPerfilUrl = cookies['webchat:perfilurl'] as string;
 
+  // router instance
   const NextRouter = useRouter();
 
   //input data schema
@@ -115,46 +118,64 @@ export default function Email({ cookies }: IPageProps) {
       perfilurl: userPerfilUrl,
       email: email,
     };
-    const userExists = await axios.post('/api/user/get-by-email', {
-      email: email,
-    });
-    const { data: userExistsStatus } = userExists;
-    if (userExistsStatus?.exists === true) {
-      setUserAlreadyExists(true);
+    try {
+      const userExists = await axios.post('/api/user/get-by-email', {
+        email: email,
+      });
+      const { data: userExistsStatus } = userExists;
+      if (userExistsStatus?.exists === true) {
+        setUserAlreadyExists(true);
+        setSucess(false);
+        resetField('email');
+      }
+      if (userExistsStatus?.exists === false) {
+        const creatingUser = await axios.post(`/api/user/create`, data);
+        if (creatingUser.status === 200) {
+          const createCookie = await axios.post('/api/user/create-cookie', {
+            token: creatingUser.data.token,
+          });
+          if (createCookie.status === 200) {
+            setSucess(true);
+            destroyCookie(null, 'webchat:name');
+            destroyCookie(null, 'webchat:perfilurl');
+            NextRouter.push('/');
+          }
+        }
+      }
+    } catch (err) {
+      setDefaultError(true);
       setSucess(false);
-      resetField('email');
+
+      setTimeout(() => {
+        setDefaultError(false);
+      }, 1000);
     }
-    if (userExistsStatus?.exists === false) {
-      const creatingUser = await axios.post(`/api/user/create`, data);
+  };
+  //continue
+  const handleContinue = async () => {
+    try {
+      const creatingUser = await axios.post('/api/user/create', {
+        name: userName,
+        perfil_url: userPerfilUrl,
+      });
+
       if (creatingUser.status === 200) {
         const createCookie = await axios.post('/api/user/create-cookie', {
           token: creatingUser.data.token,
         });
+
         if (createCookie.status === 200) {
-          setSucess(true);
           destroyCookie(null, 'webchat:name');
           destroyCookie(null, 'webchat:perfilurl');
           NextRouter.push('/');
         }
       }
-    }
-  };
-  //continue
-  const handleContinue = async () => {
-    const creatingUser = await axios.post('/api/user/create', {
-      name: userName,
-    });
-
-    if (creatingUser.status === 200) {
-      const createCookie = await axios.post('/api/user/create-cookie', {
-        token: creatingUser.data.token,
-      });
-
-      if (createCookie.status === 200) {
-        destroyCookie(null, 'webchat:name');
-        destroyCookie(null, 'webchat:perfilurl');
-        NextRouter.push('/');
-      }
+    } catch (err) {
+      setDefaultError(true);
+      setSucess(false);
+      setTimeout(() => {
+        setDefaultError(false);
+      }, 1000);
     }
   };
   //focus
@@ -193,8 +214,16 @@ export default function Email({ cookies }: IPageProps) {
         {userAlreadyExists && (
           <UserDataErrorComponent
             disableAction={setUserAlreadyExists}
-            message="Email já está existe"
+            message="Email já está sendo usado"
             state={userAlreadyExists}
+          />
+        )}
+
+        {DefaultError && (
+          <UserDataErrorComponent
+            disableAction={setUserDataInvalid}
+            message="Ocorreu um erro, Tente Novamente!"
+            state={UserDataInvalid}
           />
         )}
 
