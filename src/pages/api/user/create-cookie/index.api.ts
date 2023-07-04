@@ -9,9 +9,8 @@ export default function handleUser(req: NextApiRequest, res: NextApiResponse) {
   const { name, perfil_url }: IDataUser = req.body;
   //validation
   if (req.method === 'GET') {
-    return res.status(401).json({
-      status: 'error',
-      message: 'method invalid',
+    return res.status(404).json({
+      message: 'method not implemented',
     });
   }
 

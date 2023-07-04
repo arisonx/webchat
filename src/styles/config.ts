@@ -18,6 +18,7 @@ export const {
       gray800: '#30302f',
       gray900: '#161a1d',
       gray700: '#222121',
+      gray600: '#191A19',
       gray100: '#e1e1e1',
       grayGlass: 'rgba(82, 84, 81, 0.2)',
       grayDark: '#262626',
@@ -45,6 +46,7 @@ export const {
       cyan: '#07847E',
       blueDarkLight: '#282843',
       puplePrimary: '#31087B',
+      purpleSecondary: '#2D033B',
     },
   },
   media: {

@@ -21,6 +21,7 @@ import { parseCookies } from 'nookies';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth].api';
 import { Sucess } from '@/components/sucess';
+import { Loading } from '../../components/loading';
 //imports
 
 //fonts
@@ -62,6 +63,7 @@ export default function SignIn() {
   const [UserDataInvalid, setUserDataInvalid] = useState(false);
   const [authError, setAuthError] = useState(true);
   const [sucess, setSucess] = useState(true);
+  const [isloading, setIsloading] = useState(false);
   const NextRouter = useRouter();
   //callback auth error
   const hasAuthError = !!NextRouter.query.error;
@@ -97,26 +99,33 @@ export default function SignIn() {
       NextRouter.push('/signin/avatar');
     }
   };
+
+  //loading for authentication
+
   //auth
   const SignInWithGoogleProvider = () => {
+    setIsloading(true);
     HandlerSignIn({
       callbackurl: 'http://localhost/ui-teste',
       provider: 'google',
     });
   };
   const SignInWithGitHubProvider = () => {
+    setIsloading(true);
     HandlerSignIn({
       callbackurl: 'http://localhost/ui-teste',
       provider: 'github',
     });
   };
 
+  // setting errors and handle effects
   useEffect(() => {
     if (errors.name) {
       setUserDataInvalid(true);
+      setIsloading(false);
     }
     setFocus('name');
-  }, [errors.name]);
+  }, [errors.name, setFocus]);
 
   return (
     <>
@@ -159,6 +168,8 @@ export default function SignIn() {
             disableAction={setAuthError}
           />
         )}
+
+        {isloading && <Loading text="Carregando, Aguarde..." />}
 
         <SigninContainer>
           <h2>Para começar, informe seu nome</h2>

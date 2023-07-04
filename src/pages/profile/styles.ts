@@ -1,61 +1,113 @@
 import { styled } from '@/styles/config';
 
-export const ReturnLink = styled('div', {
-  position: 'absolute',
-  top: '1.4rem',
-  left: '1.7rem',
-  '& a': {
-    alignItems: 'center',
-    display: 'flex',
-    color: '$whiteText',
-    gap: '.5rem',
-    textDecoration: 'none',
-    fontSize: '1.2rem',
-  },
-  '& a svg': {
-    fontSize: '1.6rem',
-  },
+export const Container = styled('div', {
+  width: '80%',
+  height: '80%',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  position: 'relative',
+  paddingTop: '1rem 0',
+  gap: '3rem',
 });
 
-export const ProfilePageContainer = styled('form', {
-  width: '50%',
-  height: '80%',
-  backgroundColor: '$gray700',
+export const Heading = styled('h1', {
+  color: '$whiteText',
+  '& span': {
+    color: '$green800',
+  },
+  fontSize: '2rem',
+  fontWeight: 'bold',
+});
+
+export const EditAraContainer = styled('div', {
+  width: '100%',
+  height: '100%',
+});
+
+export const ReturnButton = styled('button', {
+  padding: '.5rem 0',
+  width: '10rem',
   display: 'flex',
   justifyContent: 'center',
+  background: 'none',
   alignItems: 'center',
-  flexDirection: 'column',
-  gap: '1rem',
+  gap: '.4rem',
+  color: '$whiteText',
+  fontSize: '1.1rem',
+  fontWeight: '400',
+  border: 'none',
   borderRadius: '.5rem',
+  cursor: 'pointer',
+  position: 'absolute',
+  left: '1%',
+  top: '4%',
+  '&:hover': {
+    color: '$blueHover',
+    cursor: 'pointer',
+  },
+  '& svg': {
+    fontSize: '1.5rem',
+  },
 });
 
-export const InputArea = styled('div', {
-  width: '80%',
+export const EditAreaComponent = styled('div', {
+  width: '100%',
+  height: '100%',
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'space-evenly',
-  padding: '1rem',
+  justifyContent: 'center',
+  borderRadius: '15px',
 });
 
-export const InputElement = styled('input', {
-  border: 'none',
-  background: 'none',
-  outline: 'none',
-  backgroundColor: '$gray800',
+export const UserDataContainer = styled('div', {
+  display: 'flex',
+  border: '2px solid $purpleSecondary',
+  width: '85%',
+  height: '65%',
+  borderRadius: '15px',
+  alignItems: 'center',
+  justifyContent: 'space-around',
+});
+
+export const UserDataTextArea = styled('div', {
+  width: '50%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+});
+
+export const UserData = styled('h2', {
+  border: '2px solid yellow  ',
+  fontWeight: 'bold',
   color: '$whiteText',
-  padding: '.8rem 1rem',
-  width: '70%',
-  borderRadius: '.3rem',
+  textAlign: 'center',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '2rem',
   fontSize: '1rem',
-  '&::placeholder': {
+  '& svg': {
     color: '$whiteText',
-    fontWeight: '400',
+    fontWeight: 'bold',
+    fontSize: '2rem',
   },
-  '&:disabled': {
-    fontWeight: '600',
-    color: '#7a7a7a',
-    '&::placeholder': {
-      color: '#7a7a7a',
-    },
+});
+
+export const EditDataButton = styled('button', {
+  padding: '.5rem 0',
+  width: '8rem',
+  display: 'flex',
+  justifyContent: 'center',
+  background: 'none',
+  border: '1px solid $purpleSecondary',
+  color: '$whiteText',
+  fontSize: '1.1rem',
+  fontWeight: '400',
+  borderRadius: '.5rem',
+  cursor: 'pointer',
+  '&:hover': {
+    boxShadow: '0 0 50px rgba(27.5, 0, 54.5)',
+    transform: 'scale(1.1)',
   },
 });

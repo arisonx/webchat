@@ -1,4 +1,6 @@
 import * as zod from 'zod';
+import axios from 'axios';
+import Head from 'next/head';
 import { Inter, Poppins } from '@next/font/google';
 import { SigninLayout } from '../layout';
 import Head from 'next/head';
@@ -41,7 +43,7 @@ const inter = Inter({
     'greek-ext',
   ],
 });
-
+// font
 const poppins = Poppins({
   weight: ['100', '200', '300', '300', '500', '600', '700', '800', '900'],
   subsets: ['latin', 'devanagari', 'latin-ext'],
@@ -78,11 +80,14 @@ export const getServerSideProps: GetServerSideProps = async (
   };
 };
 
+//---------------------------->  PAGE
 export default function Email({ cookies }: IPageProps) {
   const [UserDataInvalid, setUserDataInvalid] = useState(true);
+  const [userAlreadyExists, setUserAlreadyExists] = useState(false);
   const [sucess, setSucess] = useState(true);
+  const userName = cookies['webchat:name'] as string;
+  const userPerfilUrl = cookies['webchat:perfilurl'] as string;
 
-  const userName = cookies['webchat:name'];
   const NextRouter = useRouter();
 
   //input data schema
@@ -99,6 +104,7 @@ export default function Email({ cookies }: IPageProps) {
     setFocus,
     formState: { errors, isSubmitting, isSubmitSuccessful },
     clearErrors,
+    resetField,
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationsSchema),
   });
@@ -108,24 +114,37 @@ export default function Email({ cookies }: IPageProps) {
     const createCokie = await axios.post('/api/user', {
       perfilUrl: email,
       name: userName,
-    });
-    if (createCokie.status === 200) {
-      NextRouter.push('/');
-      destroyCookie(null, 'webchat:name');
-      destroyCookie(null, 'webchat:email');
-      destroyCookie(null, 'webchat:perfilurl');
+      perfilurl: userPerfilUrl,
+      email: email,
+    };
+    const creatingUser = await axios.post(`/api/user/create`, data);
+    if (creatingUser.status === 200) {
+      const createCookie = await axios.post('/api/user/create-cookie', {
+        token: creatingUser.data.token,
+      });
+      if (createCookie.status === 200) {
+        destroyCookie(null, 'webchat:name');
+        destroyCookie(null, 'webchat:perfilurl');
+        NextRouter.push('/');
+      }
     }
   };
   //continue
   const handleContinue = async () => {
-    const auth = await axios.post('/api/user', {
+    const creatingUser = await axios.post('/api/user/create', {
       name: userName,
     });
-    if (auth.status === 200) {
-      NextRouter.push('/');
-      destroyCookie(null, 'webchat:name');
-      destroyCookie(null, 'webchat:email');
-      destroyCookie(null, 'webchat:perfilurl');
+
+    if (creatingUser.status === 200) {
+      const createCookie = await axios.post('/api/user/create-cookie', {
+        token: creatingUser.data.token,
+      });
+
+      if (createCookie.status === 200) {
+        destroyCookie(null, 'webchat:name');
+        destroyCookie(null, 'webchat:perfilurl');
+        NextRouter.push('/');
+      }
     }
   };
   //focus
@@ -155,10 +174,25 @@ export default function Email({ cookies }: IPageProps) {
         />
       </Head>
       <SigninLayout>
-        {isSubmitSuccessful && sucess && (
+        {isSubmitSuccessful && sucess && !userAlreadyExists && (
           <Sucess
             disableAction={setSucess}
             text="Informação recebida com sucesso!"
+          />
+        )}
+        {userAlreadyExists && (
+          <UserDataErrorComponent
+            disableAction={setUserAlreadyExists}
+            message="Email já está sendo usado"
+            state={userAlreadyExists}
+          />
+        )}
+
+        {DefaultError && (
+          <UserDataErrorComponent
+            disableAction={setUserDataInvalid}
+            message="Ocorreu um erro, Tente Novamente!"
+            state={UserDataInvalid}
           />
         )}
 
