@@ -106,14 +106,14 @@ export default function SignIn() {
   const SignInWithGoogleProvider = () => {
     setIsloading(true);
     HandlerSignIn({
-      callbackurl: 'http://localhost/ui-teste',
+      callbackurl: 'http://localhost/',
       provider: 'google',
     });
   };
   const SignInWithGitHubProvider = () => {
     setIsloading(true);
     HandlerSignIn({
-      callbackurl: 'http://localhost/ui-teste',
+      callbackurl: 'http://localhost/',
       provider: 'github',
     });
   };
